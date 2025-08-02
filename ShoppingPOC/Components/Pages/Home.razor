@@ -1,7 +1,33 @@
 ﻿@page "/"
+@using Microsoft.EntityFrameworkCore
+@using ShoppingPOC.Services
+@inject IDbContextFactory<ApplicationDbContext> DbContextFactory
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(products is not null)
+        {
+            foreach (var product in products)
+            {
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Name</td>
+                    <td>@product.Price.ToString("C")</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+

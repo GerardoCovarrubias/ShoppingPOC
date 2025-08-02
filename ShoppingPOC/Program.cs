@@ -1,10 +1,19 @@
+using Microsoft.EntityFrameworkCore;
 using ShoppingPOC.Components;
+using ShoppingPOC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Register the DbContext with a connection string
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseSqlServer(connectionString);
+});
 
 var app = builder.Build();
 
