@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36212.18 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoppingPOC", "ShoppingPOC\ShoppingPOC.csproj", "{0224BB6A-E149-4C3A-85FC-2A70668D535B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{AAA31C66-1244-4C16-82E6-3224CC564BEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0224BB6A-E149-4C3A-85FC-2A70668D535B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0224BB6A-E149-4C3A-85FC-2A70668D535B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0224BB6A-E149-4C3A-85FC-2A70668D535B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0224BB6A-E149-4C3A-85FC-2A70668D535B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAA31C66-1244-4C16-82E6-3224CC564BEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAA31C66-1244-4C16-82E6-3224CC564BEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAA31C66-1244-4C16-82E6-3224CC564BEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAA31C66-1244-4C16-82E6-3224CC564BEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5AC85F5D-81EE-4306-A63A-AA5B5EA61082}
+	EndGlobalSection
+EndGlobal
