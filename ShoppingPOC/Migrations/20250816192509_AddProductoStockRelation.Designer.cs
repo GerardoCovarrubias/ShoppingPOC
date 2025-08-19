@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingPOC.Services;
 
@@ -11,9 +12,11 @@ using ShoppingPOC.Services;
 namespace ShoppingPOC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250816192509_AddProductoStockRelation")]
+    partial class AddProductoStockRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,8 +145,6 @@ namespace ShoppingPOC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("PurchaseDetail");
                 });
 
@@ -206,7 +207,7 @@ namespace ShoppingPOC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sale", (string)null);
+                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("Models.Stock", b =>
@@ -311,17 +312,6 @@ namespace ShoppingPOC.Migrations
                     b.ToTable("TicketDetail");
                 });
 
-            modelBuilder.Entity("Models.PurchaseDetail", b =>
-                {
-                    b.HasOne("Models.Product", "Product")
-                        .WithMany("PurchaseDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Models.Stock", b =>
                 {
                     b.HasOne("Models.Product", "Product")
@@ -335,8 +325,6 @@ namespace ShoppingPOC.Migrations
 
             modelBuilder.Entity("Models.Product", b =>
                 {
-                    b.Navigation("PurchaseDetails");
-
                     b.Navigation("Stock")
                         .IsRequired();
                 });

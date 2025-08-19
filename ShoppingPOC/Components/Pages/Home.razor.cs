@@ -6,7 +6,7 @@ namespace ShoppingPOC.Components.Pages
     public partial class Home
     {
         
-    private List<Products>? products;
+    private List<Product>? products;
 
         protected override async Task OnInitializedAsync()
         {

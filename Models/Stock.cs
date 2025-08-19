@@ -3,16 +3,10 @@
     public class Stock
     {
         public int Id { get; set; }
-        public string ProductName { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; } // Navigation property to Product
         public int Quantity { get; set; }
-        public string Location { get; set; }
-        public DateTime LastUpdated { get; set; }
-        public Stock(string productName, int quantity, string location, DateTime lastUpdated)
-        {
-            ProductName = productName;
-            Quantity = quantity;
-            Location = location;
-            LastUpdated = lastUpdated;
-        }
+        public DateTime UpdatedAt { get; set; } // Date and time of the purchase detail creation
+        public DateTime? CreatedAT { get; set; } // Nullable in case the purchase detail hasn't been updated yet
     }
 }
