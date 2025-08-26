@@ -19,6 +19,7 @@ namespace ShoppingPOC.Services
         public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<PurchaseDetail> PurchaseDetail { get; set; }
         public DbSet<TicketDetail> TicketDetail { get; set; }
+        public DbSet<SalesDetail> SalesDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,10 +28,27 @@ namespace ShoppingPOC.Services
                 .WithOne(s => s.Product)               // Pasaporte tiene un Usuario
                 .HasForeignKey<Stock>(p => p.ProductId); // Clave foránea en Pasaporte
             
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.PurchaseDetails)              // Producto has many StockMovimientos
-                .WithOne(d => d.Product)                 // Each StockMovimiento has one Producto
+            modelBuilder.Entity<PurchaseDetail>()
+                .HasMany(p => p.Product)              // Producto has many StockMovimientos
+                .WithOne(d => d.PurchaseDetail)                 // Each StockMovimiento has one Producto
                 .HasForeignKey(d => d.ProductId);        // Foreign key in StockMovimiento
+
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.SalesDetail)
+                .WithOne(d => d.Product)
+                .HasForeignKey(d => d.ProductId);
+
+            modelBuilder.Entity<Purchase>()
+                .HasMany(p => p.PurchaseDetail)
+                .WithOne(d => d.Purchase)
+                .HasForeignKey(d => d.PurchaseId);
+
+
+
+
+
+
+
 
             modelBuilder.Entity<Sale>()
                 .ToTable("Sale"); // Nombre deseado en la base de datos
