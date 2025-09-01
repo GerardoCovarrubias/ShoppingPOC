@@ -1,11 +1,12 @@
 ﻿
 namespace Models
 {
-    public class SalesDetail
+    public class SaleDetail
     {
         public int Id { get; set; }
         public int SaleId { get; set; }
         public string ProductId { get; set; }
+        public int PaymentMethodId { get; set; }
         public int QuantitySold { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -13,6 +14,10 @@ namespace Models
         public DateTime? UpdatedAt { get; set; }
 
         public Product Product { get; set; }
+
+        public PaymentMethod PaymentMethod { get; set; }
+
+        public Sale Sale { get; set; }
 
     }
 }

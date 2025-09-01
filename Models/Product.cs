@@ -10,7 +10,7 @@
 
         public ICollection<PurchaseDetail> PurchaseDetail { get; set; } // Navigation property to PurchaseDetails
     
-        public ICollection<SalesDetail> SalesDetail { get; set; } // Navigation property to SalesDetails
+        public ICollection<SaleDetail> SaleDetail { get; set; } // Navigation property to SalesDetails
     }
   }
 

@@ -11,6 +11,7 @@
         public string Status { get; set; } // e.g., Open, In Progress, Closed
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } // Nullable in case the ticket hasn't been updated yet
-
+        public PaymentMethod PaymentMethod { get; set; } // Navigation property to PaymentMethod
+        public Ticket Ticket { get; set; } // Navigation property to TicketDetail
     }
 }

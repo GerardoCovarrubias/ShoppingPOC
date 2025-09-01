@@ -8,5 +8,6 @@
         
         public ICollection<PurchaseDetail> PurchaseDetail { get; set; } // Navigation property to PurchaseDetails
         
+        public ICollection<Payment> Payment { get; set; } // Navigation property to Payments
     }
 }
