@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using ShoppingPOC;
 using ShoppingPOC.Components;
-using ShoppingPOC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

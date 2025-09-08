@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models;
 
-namespace ShoppingPOC.Services
+namespace ShoppingPOC
 {
     public class ApplicationDbContext : DbContext 
     {

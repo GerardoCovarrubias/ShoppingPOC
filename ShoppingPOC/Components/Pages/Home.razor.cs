@@ -17,7 +17,7 @@ namespace ShoppingPOC.Components.Pages
         {
             // Usar la fábrica para crear un DbContext y asegurar que se libera
             await using var context = await DbContextFactory.CreateDbContextAsync();
-            products = await context.Products.ToListAsync() ?? new();
+            products = await context.Product.ToListAsync() ?? new();
         }
     }
 }
