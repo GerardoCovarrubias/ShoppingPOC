@@ -5,7 +5,7 @@ namespace Models
     {
         public int Id { get; set; }
         public int SaleId { get; set; }
-        public string ProductId { get; set; }
+        public int ProductId { get; set; }
         public int PaymentMethodId { get; set; }
         public int QuantitySold { get; set; }
 
