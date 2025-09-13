@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using ShoppingPOC;
 using ShoppingPOC.Components;
 using ShoppingPOC.Data;
 
