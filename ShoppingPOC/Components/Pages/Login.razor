@@ -44,7 +44,7 @@
         _user ??= new User();
     }
 
-    private async void IniciarSesion()
+    private async Task IniciarSesion()
     {
 
         var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);

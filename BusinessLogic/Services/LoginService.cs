@@ -15,10 +15,19 @@ namespace BusinessLogic.Services
 
         public async Task<bool> ValidateUserAsync(string email, string password)
         {
-            var user = await _dbContext.User
-                .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            try
+            {
+                var user = await _dbContext.User
+                    .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
 
-            return user != null;
+                return user != null;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task ChangePasswordAsync(string email, string newPassword)

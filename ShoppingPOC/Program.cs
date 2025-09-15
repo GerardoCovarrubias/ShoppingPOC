@@ -14,7 +14,10 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseSqlServer(connectionString);
+
+    // Add the CommandTimeout option here
+    options.UseSqlServer(connectionString,
+        sqlServerOptions => sqlServerOptions.CommandTimeout(5));
 });
 
 // Register services for dependency injection
