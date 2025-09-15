@@ -2,8 +2,8 @@
 {
     public interface ILoginService
     {
-        Task<bool> ValidateUserAsync(string username, string password);
+        Task<bool> ValidateUserAsync(string email, string password);
         
-        Task ChangePasswordAsync(string username, string newPassword);
+        Task ChangePasswordAsync(string email, string newPassword);
     }
 }

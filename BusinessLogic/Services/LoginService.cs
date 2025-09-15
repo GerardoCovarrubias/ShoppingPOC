@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Contracts;
+using Microsoft.EntityFrameworkCore;
 using ShoppingPOC.Data;
 
 namespace BusinessLogic.Services
@@ -12,14 +13,25 @@ namespace BusinessLogic.Services
             _dbContext = dbContext;
         }
 
-        public Task ChangePasswordAsync(string username, string newPassword)
+        public async Task<bool> ValidateUserAsync(string email, string password)
         {
-            var user = _dbContext. User.FirstOrDefault(u => u.Username == username);
+            var user = await _dbContext.User
+                .FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+
+            return user != null;
         }
 
-        public Task<bool> ValidateUserAsync(string username, string password)
+        public async Task ChangePasswordAsync(string email, string newPassword)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (user != null)
+            {               
+                user.Password = newPassword;
+                user.UpdatedAt = DateTime.Now;
+                await _dbContext.SaveChangesAsync();
+            }
         }
+
     }
 }

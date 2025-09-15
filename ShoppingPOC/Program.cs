@@ -1,3 +1,5 @@
+using BusinessLogic.Contracts;
+using BusinessLogic.Services;
 using Microsoft.EntityFrameworkCore;
 using ShoppingPOC.Components;
 using ShoppingPOC.Data;
@@ -14,6 +16,13 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseSqlServer(connectionString);
 });
+
+// Register services for dependency injection
+#region Services
+
+builder.Services.AddScoped<ILoginService, LoginService>();
+
+#endregion Services
 
 var app = builder.Build();
 
