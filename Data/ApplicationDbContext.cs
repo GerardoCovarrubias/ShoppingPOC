@@ -20,6 +20,7 @@ namespace ShoppingPOC.Data
         public DbSet<PurchaseDetail> PurchaseDetail { get; set; }
         public DbSet<TicketDetail> TicketDetail { get; set; }
         public DbSet<SaleDetail> SalesDetail { get; set; }
+        public DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
