@@ -1,55 +1,80 @@
 ﻿@page "/"
 
 @using System.ComponentModel.DataAnnotations
+@using BusinessLogic.Contracts
+@using Models
 
-<h3>Login</h3>
 
-<EditForm Model="@credenciales" OnValidSubmit="IniciarSesion" FormName="loginForm">
+
+<EditForm Model="@_user" OnValidSubmit="IniciarSesion" FormName="loginForm">
     <DataAnnotationsValidator />
     <ValidationSummary />
+   
+    <h3>Login</h3>
+
+    <div class="grid-container">
 
     <div class="form-group">
-        <label for="username">Username</label>
-        <InputText id="username" class="form-control" @bind-Value="credenciales.Username" />
-        <ValidationMessage For="@(() => credenciales.Username)" />
+        <label for="email">Email</label>
+        <InputText id="username" class="form-control" @bind-Value="_user.Email" />
+        <ValidationMessage For="@(() => _user.Email)" />
     </div>
 
-    <div class="form-group mt-3">
+  @*   <div class="form-group mt-3">
         <label for="password">Password</label>
-        <InputText id="password" type="password" class="form-control" @bind-Value="credenciales.Password" />
-        <ValidationMessage For="@(() => credenciales.Password)" />
+        <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
+        <ValidationMessage For="@(() => _user.Password)" />
+    </div> *@
+
+        <div class="form-group mt-3 position-relative">
+            <label for="password">Password</label>
+            <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
+            <span class="password-toggle" onclick="togglePasswordVisibility()">
+                @* <i class="" id="togglePasswordIcon"></i> *@
+            </span>
+            <ValidationMessage For="@(() => _user.Password)" />
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Log In</button>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Log In</button>
 </EditForm>
 
 @code {
+
+    [Inject]
+    private ILoginService _loginService { get; set; }
+
+    [Inject]
+    private NavigationManager _navManager { get; set; }
+
     // This attribute tells Blazor to populate this property from the form data.
     [SupplyParameterFromForm(FormName = "loginForm")]
-    private Credenciales credenciales { get; set; } = new();
+    private User _user { get; set; } = new();
 
     protected override void OnInitialized()
     {
         // If the form parameter is not yet populated (e.g., on initial page load),
         // we need to initialize it.
-        credenciales ??= new Credenciales();
+        _user ??= new User();
     }
 
-    private void IniciarSesion()
+    private async Task IniciarSesion()
     {
-        // Your logic here.
-        Console.WriteLine($"Attempting to log in with Username: {credenciales.Username}");
-        Console.WriteLine($"And Password: {credenciales.Password}");
-    }
 
-    public class Credenciales
-    {
-        [Required(ErrorMessage = "Username is required.")]
-        public string? Username { get; set; }
+        var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);
 
-        [Required(ErrorMessage = "Password is required.")]
-        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long.")]
-        public string? Password { get; set; }
+        if (isValidUser)
+        {
+            // Navigate to the home page or dashboard upon successful login.
+            _navManager.NavigateTo("/home");
+            Console.WriteLine("Login successful");
+        }
+        else
+        {
+            // Show an error message or handle failed login attempt.
+            Console.WriteLine("Invalid username or password");
+        }
+        
     }
 }
 
