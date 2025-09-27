@@ -4,11 +4,15 @@
 @using BusinessLogic.Contracts
 @using Models
 
-<h3>Login</h3>
+
 
 <EditForm Model="@_user" OnValidSubmit="IniciarSesion" FormName="loginForm">
     <DataAnnotationsValidator />
     <ValidationSummary />
+   
+    <h3>Login</h3>
+
+    <div class="grid-container">
 
     <div class="form-group">
         <label for="email">Email</label>
@@ -16,13 +20,23 @@
         <ValidationMessage For="@(() => _user.Email)" />
     </div>
 
-    <div class="form-group mt-3">
+  @*   <div class="form-group mt-3">
         <label for="password">Password</label>
         <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
         <ValidationMessage For="@(() => _user.Password)" />
+    </div> *@
+
+        <div class="form-group mt-3 position-relative">
+            <label for="password">Password</label>
+            <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
+            <span class="password-toggle" onclick="togglePasswordVisibility()">
+                @* <i class="" id="togglePasswordIcon"></i> *@
+            </span>
+            <ValidationMessage For="@(() => _user.Password)" />
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Log In</button>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Log In</button>
 </EditForm>
 
 @code {
