@@ -11,8 +11,10 @@ h3 {
     width: 100%; /* El contenedor ocupa el ancho completo */
 }
 
-.btn {
-    width: 15%;
+.btnlog {
+   
+    width: 221px;
+    
 }
 
 .form-group.position-relative {

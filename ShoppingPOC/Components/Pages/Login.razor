@@ -1,7 +1,7 @@
 ﻿@page "/"
 
 @using System.ComponentModel.DataAnnotations
-@using BusinessLogic.Contracts
+@* @using BusinessLogic.Contracts *@
 @using Models
 
 
@@ -14,17 +14,11 @@
 
     <div class="grid-container">
 
-    <div class="form-group">
-        <label for="email">Email</label>
-        <InputText id="username" class="form-control" @bind-Value="_user.Email" />
-        <ValidationMessage For="@(() => _user.Email)" />
-    </div>
-
-  @*   <div class="form-group mt-3">
-        <label for="password">Password</label>
-        <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
-        <ValidationMessage For="@(() => _user.Password)" />
-    </div> *@
+        <div class="form-group">
+            <label for="email">Email</label>
+            <InputText id="username" class="form-control" @bind-Value="_user.Email" />
+            <ValidationMessage For="@(() => _user.Email)" />
+        </div>
 
         <div class="form-group mt-3 position-relative">
             <label for="password">Password</label>
@@ -34,83 +28,86 @@
             </span>
             <ValidationMessage For="@(() => _user.Password)" />
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Log In</button>
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary btnlog">Log In</button>
+        </div>
     </div>
+
 
 </EditForm>
 
+<EditForm Model="@_user2" OnValidSubmit="NavigateToChangePassword" FormName="ChangePasword">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <button type="submit" class="btn btn-secondary" >Cambiar mi contraseña</button>
+
+</EditForm>
 @code {
 
-    [Inject]
-    private ILoginService _loginService { get; set; }
+    // [Inject]
+    // private ILoginService _loginService { get; set; }
 
     [Inject]
     private NavigationManager _navManager { get; set; }
-
+   
     // This attribute tells Blazor to populate this property from the form data.
     [SupplyParameterFromForm(FormName = "loginForm")]
     private User _user { get; set; } = new();
-
+    private User _user2 { get; set; } = new();
     protected override void OnInitialized()
     {
         // If the form parameter is not yet populated (e.g., on initial page load),
         // we need to initialize it.
         _user ??= new User();
+        _user2 ??= new User();
     }
 
     private async Task IniciarSesion()
     {
 
-        var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);
+        // var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);
 
-        if (isValidUser)
-        {
+        // if (isValidUser)
+        // {
             // Navigate to the home page or dashboard upon successful login.
             _navManager.NavigateTo("/home");
             Console.WriteLine("Login successful");
-        }
-        else
-        {
-            // Show an error message or handle failed login attempt.
-            Console.WriteLine("Invalid username or password");
-        }
-        
+        // }
+        // else
+        // {
+        //     // Show an error message or handle failed login attempt.
+        //     Console.WriteLine("Invalid username or password");
+        // }
+
     }
+
+    private async Task NavigateToChangePassword()
+    {
+
+        // var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);
+
+        // if (isValidUser)
+        // {
+        // Navigate to the home page or dashboard upon successful login.
+        Console.WriteLine("Metodo Change pasword");
+        _navManager.NavigateTo("/cambiar-password");
+        
+         Console.WriteLine("Metodo Change pasword");
+        // }
+        // else
+        // {
+        //     // Show an error message or handle failed login attempt.
+        //     Console.WriteLine("Invalid username or password");
+        // }
+
+    }
+
+
 }
 
 
 
-@* <!Doctype html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Page</title>
-    <link href="css/styles.css" rel="stylesheet" />
-
-</head>
-<body>
-    <center>
-        <div>
-            <h2>Login</h2>
-            <form>
-                <div>
-                    <label>Username:</label>
-                    <input />
-
-                </div>
-                <div>
-                    <label for="password">Password: </label>
-                    <input />
-                </div>
-            </form>
-        </div>
-    </center>
-</body>
-
-</html>
- *@
 
 
 
