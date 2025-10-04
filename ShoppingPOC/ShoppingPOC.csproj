@@ -27,4 +27,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\cssstyles\style.css" />
+    <None Include="wwwroot\cssstyles\style.css.map" />
+  </ItemGroup>
+
 </Project>
