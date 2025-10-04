@@ -25,14 +25,14 @@ namespace ShoppingPOC.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.Stock)              // Usuario tiene un Pasaporte
-                .WithOne(s => s.Product)               // Pasaporte tiene un Usuario
-                .HasForeignKey<Stock>(p => p.ProductId); // Clave foránea en Pasaporte
+                .HasOne(p => p.Stock)             
+                .WithOne(s => s.Product)               
+                .HasForeignKey<Stock>(p => p.ProductId);
 
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.PurchaseDetail)
                 .WithOne(d => d.Product)
-                .HasForeignKey(d => d.ProductId);       // Foreign key in StockMovimiento
+                .HasForeignKey(d => d.ProductId);      
 
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.SaleDetail)
