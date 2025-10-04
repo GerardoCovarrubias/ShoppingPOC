@@ -2,7 +2,7 @@
 
 @using System.ComponentModel.DataAnnotations
 @rendermode InteractiveServer
-@* @using BusinessLogic.Contracts *@
+@using BusinessLogic.Contracts
 @using Models
 
 
@@ -40,8 +40,8 @@
 <button type="submit" class="btn btn-secondary" @onclick="NavigateToChangePassword">Cambiar mi contraseña</button>
 @code {
 
-    // [Inject]
-    // private ILoginService _loginService { get; set; }
+     [Inject]
+     private ILoginService _loginService { get; set; }
 
     [Inject]
     private NavigationManager _navManager { get; set; }
@@ -49,53 +49,37 @@
     // This attribute tells Blazor to populate this property from the form data.
     [SupplyParameterFromForm(FormName = "loginForm")]
     private User _user { get; set; } = new();
-    private User _user2 { get; set; } = new();
+   
     protected override void OnInitialized()
     {
         // If the form parameter is not yet populated (e.g., on initial page load),
         // we need to initialize it.
         _user ??= new User();
-        _user2 ??= new User();
+       
     }
 
     private async Task IniciarSesion()
     {
 
-        // var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);
+        var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);
 
-        // if (isValidUser)
-        // {
+        if (isValidUser)
+        {
             // Navigate to the home page or dashboard upon successful login.
             _navManager.NavigateTo("/home");
             Console.WriteLine("Login successful");
-        // }
-        // else
-        // {
-        //     // Show an error message or handle failed login attempt.
-        //     Console.WriteLine("Invalid username or password");
-        // }
+        }
+        else
+        {
+            // Show an error message or handle failed login attempt.
+            Console.WriteLine("Invalid username or password");
+        }
 
     }
 
     private async Task NavigateToChangePassword()
     {
-
-        // var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);
-
-        // if (isValidUser)
-        // {
-        // Navigate to the home page or dashboard upon successful login.
-        Console.WriteLine("Metodo Change pasword");
-        _navManager.NavigateTo("/cambiar-password");
-        
-         Console.WriteLine("Metodo Change pasword");
-        // }
-        // else
-        // {
-        //     // Show an error message or handle failed login attempt.
-        //     Console.WriteLine("Invalid username or password");
-        // }
-
+        _navManager.NavigateTo("/cambiar-password");     
     }
 
 
