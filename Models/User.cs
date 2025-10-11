@@ -18,5 +18,10 @@ namespace Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
 
+        //[Required(ErrorMessage = "La contraseña es obligatoria")]
+        //[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$",
+        // ErrorMessage = "Debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo.")]
+        //public string NewPassword { get; set; }
+
     }
 }
