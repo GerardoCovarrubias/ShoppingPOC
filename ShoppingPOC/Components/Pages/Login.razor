@@ -2,6 +2,7 @@
 
 @using System.ComponentModel.DataAnnotations
 @rendermode InteractiveServer
+@* @using BusinessLogic.Contracts *@
 @using BusinessLogic.Contracts
 @using Models
 
@@ -37,7 +38,13 @@
 
 </EditForm>
 
-<button type="submit" class="btn btn-secondary" @onclick="NavigateToChangePassword">Cambiar mi contraseña</button>
+<div class="ChangePassword">
+
+    <a type="submit"
+       @onclick="NavigateToChangePassword"
+       class="d-inline-block mt-2">Olvide mi contraseña</a>
+</div>
+
 @code {
 
      [Inject]
@@ -79,7 +86,7 @@
 
     private async Task NavigateToChangePassword()
     {
-        _navManager.NavigateTo("/cambiar-password");     
+        _navManager.NavigateTo("/EmailValidation");
     }
 
 

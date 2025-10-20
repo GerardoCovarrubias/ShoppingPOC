@@ -32,13 +32,22 @@ namespace BusinessLogic.Services
 
         public async Task ChangePasswordAsync(string email, string newPassword)
         {
-            var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
+            try
+            {
+                var user = await _dbContext.User.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
 
-            if (user != null)
-            {               
-                user.Password = newPassword;
-                user.UpdatedAt = DateTime.Now;
-                await _dbContext.SaveChangesAsync();
+           
+                    if (user != null)
+                    {
+                       user.Password = newPassword;
+                        user.UpdatedAt = DateTime.Now;
+                        await _dbContext.SaveChangesAsync();
+                    }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
             }
         }
 

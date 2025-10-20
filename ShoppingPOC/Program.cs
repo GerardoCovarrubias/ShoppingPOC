@@ -27,6 +27,8 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<ILoginService, LoginService>();
 
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 #endregion Services
 
 var app = builder.Build();

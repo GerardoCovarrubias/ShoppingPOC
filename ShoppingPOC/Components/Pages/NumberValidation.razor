@@ -1,0 +1,31 @@
+﻿@page "/NumberValidation"
+@using System.ComponentModel.DataAnnotations
+@rendermode InteractiveServer
+@using BusinessLogic.Contracts
+@using Models
+
+<h3>NumberValidation</h3>
+<EditForm model=@_emailValidation OnValidSubmit="HandleCodeValidation" FormName="formEmailValidation">
+    <div class="grid-container">
+        <div class="form-group">
+            <label for="codigo">Code: </label>
+            <InputText id="codigo" type="text" class="form-control" @bind-Value="_emailValidation.Email" />
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Validar </button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Inject]
+    private NavigationManager _navManager { get; set; }
+    private User _emailValidation { get; set; } = new();
+
+    private async Task HandleCodeValidation()
+    {
+        Console.WriteLine("code: " + _emailValidation.Email);
+        _navManager.NavigateTo("/PasswordUpdate");
+    }
+}

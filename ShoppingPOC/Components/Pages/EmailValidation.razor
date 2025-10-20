@@ -1,0 +1,52 @@
+﻿<h3>EmailValidation</h3>
+
+@page "/EmailValidation"
+@using System.ComponentModel.DataAnnotations
+@rendermode InteractiveServer
+@using BusinessLogic.Contracts
+@using Models
+
+<h3>Paracambiar la contraseña ingresar</h3>
+<EditForm model=@_emailValidation OnValidSubmit="HandleEmailValidation" FormName="formEmailValidation">
+    <div class="grid-container">
+        <div class="form-group">
+            <label for="email">Correo: </label>
+            <InputText id="email" type="email" class="form-control" @bind-Value="_emailValidation.Email" />
+        </div>
+
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary">Validar correo </button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Inject]
+    private ILoginService _loginService { get; set; }
+    [Inject]
+    private IEmailService _emailService { get; set; }
+
+    [Inject]
+    private NavigationManager _navManager { get; set; }
+
+    [SupplyParameterFromForm(FormName = "formEmailValidation")]
+    private User _emailValidation { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        // Removed the invalid assignment to _loginService.
+        // _loginService is injected and should not be assigned to a User instance.
+        if (_loginService == null)
+        {
+            throw new InvalidOperationException("ILoginService is not initialized.");
+        }
+    }
+
+    private async Task HandleEmailValidation()
+    {
+        _emailService.SendMail(_emailValidation.Email, "Email Title", "Email body");
+
+               Console.WriteLine("Correo: " + _emailValidation.Email);
+              _navManager.NavigateTo("/PasswordUpdate");
+    }
+}
