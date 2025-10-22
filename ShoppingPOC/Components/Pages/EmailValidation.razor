@@ -34,17 +34,12 @@
 
     protected override void OnInitialized()
     {
-        // Removed the invalid assignment to _loginService.
-        // _loginService is injected and should not be assigned to a User instance.
-        if (_loginService == null)
-        {
-            throw new InvalidOperationException("ILoginService is not initialized.");
-        }
+       
     }
 
-    private async Task HandleEmailValidation()
+    private void HandleEmailValidation()
     {
-        _emailService.SendMail(_user.Email, "Email Title", "Email body");
+        _emailService.SendMail(_user.Email, "ShoppingPOC - Your Password Update Code", "Your code for updating your password is 999666");
 
                Console.WriteLine("Correo: " + _user.Email);
               _navManager.NavigateTo("/PasswordUpdate");

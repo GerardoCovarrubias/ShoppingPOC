@@ -2,7 +2,6 @@
 
 @using System.ComponentModel.DataAnnotations
 @rendermode InteractiveServer
-@* @using BusinessLogic.Contracts *@
 @using BusinessLogic.Contracts
 @using Models
 
@@ -26,7 +25,6 @@
             <label for="password">Password</label>
             <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
             <span class="password-toggle" onclick="togglePasswordVisibility()">
-                @* <i class="" id="togglePasswordIcon"></i> *@
             </span>
             <ValidationMessage For="@(() => _user.Password)" />
         </div>
@@ -84,7 +82,7 @@
 
     }
 
-    private async Task NavigateToChangePassword()
+    private void NavigateToChangePassword()
     {
         _navManager.NavigateTo("/EmailValidation");
     }
