@@ -51,5 +51,22 @@ namespace BusinessLogic.Services
             }
         }
 
+        public async Task<bool> UserExistsAsync(string email)
+        {
+            try
+            {
+                var user = await _dbContext.User
+                    .FirstOrDefaultAsync(u => u.Email == email);
+
+                return user != null;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

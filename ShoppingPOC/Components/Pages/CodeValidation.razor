@@ -3,6 +3,7 @@
 @inject NavigationManager _navManager
 @using System.ComponentModel.DataAnnotations
 @using Models
+@using ShoppingPOC.ViewModels
 @rendermode InteractiveServer
 
 <h3>Code Validation</h3>
@@ -29,7 +30,7 @@
     private string UserCode { get; set; } = string.Empty;
     private string ErrorMessage { get; set; } = string.Empty;
     private int AttemptCount { get; set; } = 0;
-    private PasswordResetState _resetState { get; set; } = new();
+    private PasswordResetViewModel _resetState { get; set; } = new();
 
     private void ValidateCode()
     {

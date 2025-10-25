@@ -1,22 +1,21 @@
 ﻿@page "/EmailValidation"
 
-@rendermode InteractiveServer
-
 @using System.ComponentModel.DataAnnotations
 @using BusinessLogic.Contracts
 @using BusinessLogic.Services
 @using Models
+@using ShoppingPOC.ViewModels
 
 <h3>Email Validation</h3>
 
-<EditForm model=@_user OnValidSubmit="HandleEmailValidation" FormName="formEmailValidation">
+<EditForm model=@_passwordResetModel OnValidSubmit="HandleEmailValidation" FormName="formEmailValidation">
     <DataAnnotationsValidator />
     <div class="grid-container">
         <div class="form-group">
             <label for="email">Email: </label>
-            <InputText id="email" type="email" class="form-control" @bind-Value="_user.Email" />
+            <InputText id="email" type="email" class="form-control" @bind-Value="_passwordResetModel.Email" />
         </div>
-        <ValidationMessage For="@(() => _user.Email)" />
+        <ValidationMessage For="@(() => _passwordResetModel.Email)" />
         <div class="form-group mt-3">
             <button type="submit" class="btn btn-primary">Email validation</button>
         </div>
@@ -24,8 +23,6 @@
 </EditForm>
 
 @code {
-    [Inject]
-    private ILoginService _loginService { get; set; }
 
     [Inject]
     private IEmailService _emailService { get; set; }
@@ -34,15 +31,8 @@
     private NavigationManager _navManager { get; set; }
 
 
-    [SupplyParameterFromForm(FormName = "formEmailValidation")]
-
-    private User _user { get; set; } = new();
-    private PasswordResetState _resetState { get; set; }
-
-    protected override void OnInitialized()
-    {
-        _user ??= new User();
-    }
+    [SupplyParameterFromForm(FormName = "formEmailValidation")]
+    private PasswordResetViewModel _passwordResetModel { get; set; } = new();
 
     private string GenerateUniqueSixDigitCode()
     {
@@ -59,15 +49,14 @@
 
     public void HandleEmailValidation()
     {
-        _resetState.Email = _user.Email;
-
+        
         string code = GenerateUniqueSixDigitCode();
-        _resetState.ValidationCode = code;
+        _passwordResetModel.ValidationCode = code;
 
-        _emailService.SendMail(_user.Email, "Email confirmation", "Tu código de validación es: " + code);
+        _emailService.SendMail(_passwordResetModel.Email, "Email confirmation", "Your validation code is: " + code);
 
-        Console.WriteLine("Correo: " + _user.Email);
-        Console.WriteLine("Código enviado: " + _resetState.ValidationCode);
+        Console.WriteLine("Email: " + _passwordResetModel.Email);
+        Console.WriteLine("Code sent: " + _passwordResetModel.ValidationCode);
 
         _navManager.NavigateTo("/CodeValidation");
     }
