@@ -34,7 +34,7 @@ namespace BusinessLogic.Services
         {
             try
             {
-                var user = await _dbContext.User.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
+                var user = await _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
 
            
                     if (user != null)

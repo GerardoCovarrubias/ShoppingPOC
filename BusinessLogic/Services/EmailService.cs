@@ -23,14 +23,14 @@ namespace BusinessLogic.Services
                     smtp.EnableSsl = true;
                     smtp.Send(mail);
                 }
-            }
+        }
             catch (Exception ex)
             {
                 var error = ex.Message;
 
                 throw;
             }
-           
-    }
+
+}
 }
 }

@@ -1,0 +1,59 @@
+﻿@page "/CodeValidation"
+@using BusinessLogic.Services
+@inject NavigationManager _navManager
+@using System.ComponentModel.DataAnnotations
+@using Models
+@rendermode InteractiveServer
+
+<h3>Code Validation</h3>
+
+<EditForm Model="@this" OnValidSubmit="ValidateCode" FormName="formCodeValidation">
+    <div class="grid-container">
+    <div class="form-group">
+            <label for="code">Enter the code sent:</label>
+        <InputText id="code" class="form-control" @bind-Value="UserCode" />
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Validate</button>
+    </div>
+    </div>
+</EditForm>
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p class="text-danger">@ErrorMessage</p>
+}
+
+@code {
+    private string UserCode { get; set; } = string.Empty;
+    private string ErrorMessage { get; set; } = string.Empty;
+    private int AttemptCount { get; set; } = 0;
+    private PasswordResetState _resetState { get; set; } = new();
+
+    private void ValidateCode()
+    {
+        Console.WriteLine($"UserCode: {UserCode}"); // Moved inside the method to fix context issues
+        Console.WriteLine($"ResetState.ValidationCode: {_resetState.ValidationCode}");
+        if (UserCode == _resetState.ValidationCode)
+        {
+            // Código correcto
+            _navManager.NavigateTo("/PasswordUpdate");
+        }
+        else
+        {
+            AttemptCount++;
+
+            if (AttemptCount >= 3)
+            {
+                // Demasiados intentos fallidos
+                ErrorMessage = string.Empty;
+                _navManager.NavigateTo("/EmailValidation");
+            }
+            else
+            {
+                ErrorMessage = $"Código incorrecto. Intento {AttemptCount} de 3.";
+            }
+        }
+    }
+}

@@ -1,21 +1,24 @@
-﻿<h3>EmailValidation</h3>
+﻿@page "/EmailValidation"
 
-@page "/EmailValidation"
-@using System.ComponentModel.DataAnnotations
 @rendermode InteractiveServer
+
+@using System.ComponentModel.DataAnnotations
 @using BusinessLogic.Contracts
+@using BusinessLogic.Services
 @using Models
 
-<h3>Paracambiar la contraseña ingresar</h3>
+<h3>Email Validation</h3>
+
 <EditForm model=@_user OnValidSubmit="HandleEmailValidation" FormName="formEmailValidation">
+    <DataAnnotationsValidator />
     <div class="grid-container">
         <div class="form-group">
-            <label for="email">Correo: </label>
+            <label for="email">Email: </label>
             <InputText id="email" type="email" class="form-control" @bind-Value="_user.Email" />
         </div>
-
+        <ValidationMessage For="@(() => _user.Email)" />
         <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary">Validar correo </button>
+            <button type="submit" class="btn btn-primary">Email validation</button>
         </div>
     </div>
 </EditForm>
@@ -23,30 +26,49 @@
 @code {
     [Inject]
     private ILoginService _loginService { get; set; }
+
     [Inject]
     private IEmailService _emailService { get; set; }
 
     [Inject]
     private NavigationManager _navManager { get; set; }
 
-    [SupplyParameterFromForm(FormName = "formEmailValidation")]
+
+    [SupplyParameterFromForm(FormName = "formEmailValidation")]
+
     private User _user { get; set; } = new();
+    private PasswordResetState _resetState { get; set; }
 
     protected override void OnInitialized()
     {
-        // Removed the invalid assignment to _loginService.
-        // _loginService is injected and should not be assigned to a User instance.
-        if (_loginService == null)
-        {
-            throw new InvalidOperationException("ILoginService is not initialized.");
-        }
+        _user ??= new User();
     }
 
-    private async Task HandleEmailValidation()
+    private string GenerateUniqueSixDigitCode()
     {
-        _emailService.SendMail(_user.Email, "Email Title", "Email body");
+        Random rnd = new Random();
+        HashSet<int> digits = new();
 
-               Console.WriteLine("Correo: " + _user.Email);
-              _navManager.NavigateTo("/PasswordUpdate");
+        while (digits.Count < 6)
+        {
+            digits.Add(rnd.Next(0, 10));
+        }
+
+        return string.Concat(digits);
+    }
+
+    public void HandleEmailValidation()
+    {
+        _resetState.Email = _user.Email;
+
+        string code = GenerateUniqueSixDigitCode();
+        _resetState.ValidationCode = code;
+
+        _emailService.SendMail(_user.Email, "Email confirmation", "Tu código de validación es: " + code);
+
+        Console.WriteLine("Correo: " + _user.Email);
+        Console.WriteLine("Código enviado: " + _resetState.ValidationCode);
+
+        _navManager.NavigateTo("/CodeValidation");
     }
 }
