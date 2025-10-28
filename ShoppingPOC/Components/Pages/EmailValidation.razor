@@ -5,22 +5,30 @@
 @using BusinessLogic.Services
 @using Models
 @using ShoppingPOC.ViewModels
+@rendermode InteractiveServer
 
-<h3>Email Validation</h3>
+@if (!showCodeValidation)
+{
+    <h3>Email Validation</h3>
 
-<EditForm model=@_passwordResetModel OnValidSubmit="HandleEmailValidation" FormName="formEmailValidation">
-    <DataAnnotationsValidator />
-    <div class="grid-container">
-        <div class="form-group">
-            <label for="email">Email: </label>
-            <InputText id="email" type="email" class="form-control" @bind-Value="_passwordResetModel.Email" />
+    <EditForm model=@_passwordResetModel OnValidSubmit="HandleEmailValidation" FormName="formEmailValidation">
+        <DataAnnotationsValidator />
+        <div class="grid-container">
+            <div class="form-group">
+                <label for="email">Email: </label>
+                <InputText id="email" type="email" class="form-control" @bind-Value="_passwordResetModel.Email" />
+            </div>
+            <ValidationMessage For="@(() => _passwordResetModel.Email)" />
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Email validation</button>
+            </div>
         </div>
-        <ValidationMessage For="@(() => _passwordResetModel.Email)" />
-        <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary">Email validation</button>
-        </div>
-    </div>
-</EditForm>
+    </EditForm>
+}
+else
+{
+    <CodeValidation ValidationCode = "_passwordResetModel.ValidationCode" />
+}
 
 @code {
 
@@ -34,7 +42,10 @@
     [SupplyParameterFromForm(FormName = "formEmailValidation")]
     private PasswordResetViewModel _passwordResetModel { get; set; } = new();
 
-    private string GenerateUniqueSixDigitCode()
+    private bool showCodeValidation = false;
+
+
+    private int GenerateUniqueSixDigitCode()
     {
         Random rnd = new Random();
         HashSet<int> digits = new();
@@ -44,20 +55,21 @@
             digits.Add(rnd.Next(0, 10));
         }
 
-        return string.Concat(digits);
+        return int.Parse(string.Concat(digits));
     }
 
-    public void HandleEmailValidation()
+    public void HandleEmailValidation()
     {
-        
-        string code = GenerateUniqueSixDigitCode();
-        _passwordResetModel.ValidationCode = code;
 
-        _emailService.SendMail(_passwordResetModel.Email, "Email confirmation", "Your validation code is: " + code);
+        _passwordResetModel.ValidationCode = GenerateUniqueSixDigitCode();
+
+        _emailService.SendMail(_passwordResetModel.Email,
+            "Email confirmation", "Your validation code is: " + _passwordResetModel.ValidationCode);
 
         Console.WriteLine("Email: " + _passwordResetModel.Email);
         Console.WriteLine("Code sent: " + _passwordResetModel.ValidationCode);
+        showCodeValidation = true;
 
-        _navManager.NavigateTo("/CodeValidation");
+        //StateHasChanged();
     }
 }

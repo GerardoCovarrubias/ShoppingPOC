@@ -6,6 +6,6 @@ namespace ShoppingPOC.ViewModels
     {
         [Required(ErrorMessage = "Email is required.")]
         public string Email { get; set; } = string.Empty;
-        public string ValidationCode { get; set; } = string.Empty;
+        public int ValidationCode { get; set; }
     }
 }
