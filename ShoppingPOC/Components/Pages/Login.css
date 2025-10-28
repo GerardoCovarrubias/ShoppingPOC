@@ -1,5 +1,11 @@
 h3 {
-  color: blue;
+  color: orangered;
+}
+
+.ChangePassword {
+  display: flex;
+  justify-content: center;
+  align-items: end;
 }
 
 /*# sourceMappingURL=Login.css.map */

@@ -1,0 +1,75 @@
+﻿@page "/EmailValidation"
+
+@using System.ComponentModel.DataAnnotations
+@using BusinessLogic.Contracts
+@using BusinessLogic.Services
+@using Models
+@using ShoppingPOC.ViewModels
+@rendermode InteractiveServer
+
+@if (!showCodeValidation)
+{
+    <h3>Email Validation</h3>
+
+    <EditForm model=@_passwordResetModel OnValidSubmit="HandleEmailValidation" FormName="formEmailValidation">
+        <DataAnnotationsValidator />
+        <div class="grid-container">
+            <div class="form-group">
+                <label for="email">Email: </label>
+                <InputText id="email" type="email" class="form-control" @bind-Value="_passwordResetModel.Email" />
+            </div>
+            <ValidationMessage For="@(() => _passwordResetModel.Email)" />
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Email validation</button>
+            </div>
+        </div>
+    </EditForm>
+}
+else
+{
+    <CodeValidation ValidationCode = "_passwordResetModel.ValidationCode" />
+}
+
+@code {
+
+    [Inject]
+    private IEmailService _emailService { get; set; }
+
+    [Inject]
+    private NavigationManager _navManager { get; set; }
+
+
+    [SupplyParameterFromForm(FormName = "formEmailValidation")]
+    private PasswordResetViewModel _passwordResetModel { get; set; } = new();
+
+    private bool showCodeValidation = false;
+
+
+    private int GenerateUniqueSixDigitCode()
+    {
+        Random rnd = new Random();
+        HashSet<int> digits = new();
+
+        while (digits.Count < 6)
+        {
+            digits.Add(rnd.Next(0, 10));
+        }
+
+        return int.Parse(string.Concat(digits));
+    }
+
+    public void HandleEmailValidation()
+    {
+
+        _passwordResetModel.ValidationCode = GenerateUniqueSixDigitCode();
+
+        _emailService.SendMail(_passwordResetModel.Email,
+            "Email confirmation", "Your validation code is: " + _passwordResetModel.ValidationCode);
+
+        Console.WriteLine("Email: " + _passwordResetModel.Email);
+        Console.WriteLine("Code sent: " + _passwordResetModel.ValidationCode);
+        showCodeValidation = true;
+
+        //StateHasChanged();
+    }
+}

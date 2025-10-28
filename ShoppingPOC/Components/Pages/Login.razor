@@ -2,6 +2,7 @@
 
 @using System.ComponentModel.DataAnnotations
 @rendermode InteractiveServer
+@* @using BusinessLogic.Contracts *@
 @using BusinessLogic.Contracts
 @using Models
 
@@ -9,7 +10,7 @@
 
 <EditForm Model="@_user" OnValidSubmit="IniciarSesion" FormName="loginForm">
     <DataAnnotationsValidator />
-    <ValidationSummary />
+    @* <ValidationSummary /> *@
    
     <h3>Login</h3>
 
@@ -18,17 +19,18 @@
         <div class="form-group">
             <label for="email">Email</label>
             <InputText id="username" class="form-control" @bind-Value="_user.Email" />
-            <ValidationMessage For="@(() => _user.Email)" />
+             
         </div>
-
+        <ValidationMessage For="@(() => _user.Email)" />
         <div class="form-group mt-3 position-relative">
             <label for="password">Password</label>
             <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
             <span class="password-toggle" onclick="togglePasswordVisibility()">
                 @* <i class="" id="togglePasswordIcon"></i> *@
             </span>
-            <ValidationMessage For="@(() => _user.Password)" />
+            
         </div>
+        <ValidationMessage For="@(() => _user.Password)" />
         <div class="form-group mt-3">
             <button type="submit" class="btn btn-primary btnlog">Log In</button>
         </div>
@@ -37,7 +39,13 @@
 
 </EditForm>
 
-<button type="submit" class="btn btn-secondary" @onclick="NavigateToChangePassword">Cambiar mi contraseña</button>
+<div class="ChangePassword">
+
+    <a type="submit"
+       @onclick="NavigateToChangePassword"
+       class="d-inline-block mt-2">I forgot my password</a>
+</div>
+
 @code {
 
      [Inject]
@@ -79,7 +87,7 @@
 
     private async Task NavigateToChangePassword()
     {
-        _navManager.NavigateTo("/cambiar-password");     
+        _navManager.NavigateTo("/EmailValidation");
     }
 
 

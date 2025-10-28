@@ -31,3 +31,11 @@ h3 {
     cursor: pointer; /* Cambia el cursor para indicar que es clicable */
     z-index: 100; /* Asegura que el ícono esté por encima del input */
 }
+
+
+.ChangePassword {
+    /*hace que los elementos esten "dentro" del div*/
+    display: flex;
+    /*centra los elementos en el eje horizontal*/
+    justify-content: center;
+}
