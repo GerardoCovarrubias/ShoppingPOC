@@ -14,13 +14,13 @@ namespace BusinessLogic.Services
             _loginService = loginService;
         }
 
-        public async Task<Result> SendMailAsync(string useremail, string subject, string body)
+        public async Task<Result> SendMailAsync(string userEmail, string subject, string body)
         {
             try
             {
-                if (!await _loginService.UserExistsAsync(useremail))
+                if (!await _loginService.UserExistsAsync(userEmail))
                 {
-                    return new Result(ResultStatusCode.ProcessError, "El usuario no existe.");
+                    return new Result(ResultStatusCode.ProcessError, "The user does not exist.");
                 }
 
                 var mail = new MailMessage
@@ -30,7 +30,7 @@ namespace BusinessLogic.Services
                     Body = body,
                     IsBodyHtml = true
                 };
-                mail.To.Add(useremail);
+                mail.To.Add(userEmail);
 
                 using (var smtp = new SmtpClient("smtp.gmail.com", 587))
                 {
@@ -50,6 +50,5 @@ namespace BusinessLogic.Services
                 return new Result(ResultStatusCode.Exception, $"Excepción inesperada: {ex.Message}");
             }
         }
-
     }
 }

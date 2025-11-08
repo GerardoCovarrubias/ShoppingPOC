@@ -78,16 +78,13 @@ else
 
         if (result.StatusCode == ResultStatusCode.Success)
         {
-            emailStatusMessage = "El correo fue enviado correctamente.";
+            emailStatusMessage = "The mail was sent successfully.";
             showCodeValidation = true;
         }
         else
         {
-            emailStatusMessage = $"Error al enviar el correo: {result.ErrorMessage}";
+            emailStatusMessage = $"Mistake to send the mail: {result.ErrorMessage}";
             showCodeValidation = false;
         }
-
-        //StateHasChanged(); // Descomenta si estás en un componente Blazor
     }
-
 }
