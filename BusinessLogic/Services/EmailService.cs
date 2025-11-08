@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Contracts;
+using Models;
 using System.Net;
 using System.Net.Mail;
 
@@ -13,36 +14,42 @@ namespace BusinessLogic.Services
             _loginService = loginService;
         }
 
-        public async void SendMail(string useremail, string subject, string body)
+        public async Task<Result> SendMailAsync(string useremail, string subject, string body)
         {
             try
             {
-
-                if (await _loginService.UserExistsAsync(useremail))
+                if (!await _loginService.UserExistsAsync(useremail))
                 {
-
-                    var mail = new MailMessage();
-                    mail.From = new MailAddress("isainokia@gmail.com");
-                    mail.To.Add(useremail);
-                    mail.Subject = subject;
-                    mail.Body = body;
-                    mail.IsBodyHtml = true;
-
-                    using (var smtp = new SmtpClient("smtp.gmail.com", 587))
-                    {
-                        smtp.Credentials = new NetworkCredential("isainokia@gmail.com", "ftpn focn knbq swsv");
-                        smtp.EnableSsl = true;
-                        smtp.Send(mail);
-                    }
+                    return new Result(ResultStatusCode.ProcessError, "El usuario no existe.");
                 }
+
+                var mail = new MailMessage
+                {
+                    From = new MailAddress("isainokia@gmail.com"),
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true
+                };
+                mail.To.Add(useremail);
+
+                using (var smtp = new SmtpClient("smtp.gmail.com", 587))
+                {
+                    smtp.Credentials = new NetworkCredential("isainokia@gmail.com", "ftpn focn knbq swsv");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mail);
+                }
+
+                return new Result(ResultStatusCode.Success);
+            }
+            catch (SmtpException smtpEx)
+            {
+                return new Result(ResultStatusCode.ProcessError, $"Error SMTP: {smtpEx.Message}");
             }
             catch (Exception ex)
             {
-                var error = ex.Message;
-
-                throw;
+                return new Result(ResultStatusCode.Exception, $"Excepción inesperada: {ex.Message}");
             }
-
         }
+
     }
 }

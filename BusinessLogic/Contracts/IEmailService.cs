@@ -1,9 +1,12 @@
-﻿namespace BusinessLogic.Contracts
+﻿using Models;
+
+namespace BusinessLogic.Contracts
 {
     public interface IEmailService
     {
 
-        void SendMail(string to, string subject, string body);
+        Task<Result> SendMailAsync(string useremail, string subject, string body);
+
 
     }
 }

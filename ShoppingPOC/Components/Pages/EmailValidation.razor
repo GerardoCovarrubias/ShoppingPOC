@@ -11,7 +11,7 @@
 {
     <h3>Email Validation</h3>
 
-    <EditForm model=@_passwordResetModel OnValidSubmit="HandleEmailValidation" FormName="formEmailValidation">
+    <EditForm model=@_passwordResetModel OnValidSubmit="HandleEmailValidationAsync" FormName="formEmailValidation">
         <DataAnnotationsValidator />
         <div class="grid-container">
             <div class="form-group">
@@ -22,6 +22,10 @@
             <div class="form-group mt-3">
                 <button type="submit" class="btn btn-primary">Email validation</button>
             </div>
+            @if (!string.IsNullOrEmpty(emailStatusMessage))
+            {
+                <div class="alert alert-info mt-3">@emailStatusMessage</div>
+            }
         </div>
     </EditForm>
 }
@@ -43,6 +47,7 @@ else
     private PasswordResetViewModel _passwordResetModel { get; set; } = new();
 
     private bool showCodeValidation = false;
+    private string? emailStatusMessage;
 
 
     private int GenerateUniqueSixDigitCode()
@@ -58,18 +63,31 @@ else
         return int.Parse(string.Concat(digits));
     }
 
-    public void HandleEmailValidation()
+    public async Task HandleEmailValidationAsync()
     {
-
         _passwordResetModel.ValidationCode = GenerateUniqueSixDigitCode();
 
-        _emailService.SendMail(_passwordResetModel.Email,
-            "Email confirmation", "Your validation code is: " + _passwordResetModel.ValidationCode);
+        var result = await _emailService.SendMailAsync(
+            _passwordResetModel.Email,
+            "Email confirmation",
+            "Your validation code is: " + _passwordResetModel.ValidationCode
+        );
 
         Console.WriteLine("Email: " + _passwordResetModel.Email);
         Console.WriteLine("Code sent: " + _passwordResetModel.ValidationCode);
-        showCodeValidation = true;
 
-        //StateHasChanged();
+        if (result.StatusCode == ResultStatusCode.Success)
+        {
+            emailStatusMessage = "El correo fue enviado correctamente.";
+            showCodeValidation = true;
+        }
+        else
+        {
+            emailStatusMessage = $"Error al enviar el correo: {result.ErrorMessage}";
+            showCodeValidation = false;
+        }
+
+        //StateHasChanged(); // Descomenta si estás en un componente Blazor
     }
+
 }
