@@ -23,7 +23,7 @@
     private NavigationManager _navManager { get; set; }
     private User _emailValidation { get; set; } = new();
 
-    private async Task HandleCodeValidation()
+    private void HandleCodeValidation()
     {
         Console.WriteLine("code: " + _emailValidation.Email);
         _navManager.NavigateTo("/PasswordUpdate");

@@ -21,41 +21,39 @@
     </div>
 </div>
 
-@if (!string.IsNullOrEmpty(ErrorMessage))
+@if (!string.IsNullOrEmpty(_errorMessage))
 {
-    <p class="text-danger">@ErrorMessage</p>
+    <p class="text-danger">@_errorMessage</p>
 }
 
 @code {
     [Parameter]
     public int ValidationCode { get; set; }
 
-    private string ErrorMessage { get; set; } = string.Empty;
-    private int AttemptCount { get; set; } = 0;
+    private string _errorMessage { get; set; } = string.Empty;
+    private int _attemptCount { get; set; } = 0;
     private int _userInputCode { get; set; } = new();
 
     private void ValidateCode()
     {
-        Console.WriteLine($"UserCode: {ValidationCode}"); // Moved inside the method to fix context issues
+        Console.WriteLine($"UserCode: {ValidationCode}"); 
         Console.WriteLine($"ResetState.ValidationCode: {_userInputCode}");
         if (ValidationCode == _userInputCode)
         {
-            // Código correcto
             _navManager.NavigateTo("/PasswordUpdate");
         }
         else
         {
-            AttemptCount++;
+            _attemptCount++;
 
-            if (AttemptCount >= 3)
+            if (_attemptCount >= 3)
             {
-                // Demasiados intentos fallidos
-                ErrorMessage = string.Empty;
+                _errorMessage = string.Empty;
                 _navManager.NavigateTo("/EmailValidation");
             }
             else
             {
-                ErrorMessage = $"Código incorrecto. Intento {AttemptCount} de 3.";
+                _errorMessage = $"Código incorrecto. Intento {_attemptCount} de 3.";
             }
         }
     }
