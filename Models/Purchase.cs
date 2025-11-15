@@ -3,11 +3,11 @@
     public class Purchase
     {
         public int Id { get; set; }
-        DateTime UpdatedAt { get; set; } // Date and time of the purchase detail creation
-        DateTime CreatedAT { get; set; } // Nullable in case the purchase detail hasn't been updated yet
+        DateTime UpdatedAt { get; set; } 
+        DateTime CreatedAT { get; set; } 
         
-        public ICollection<PurchaseDetail> PurchaseDetail { get; set; } // Navigation property to PurchaseDetails
+        public ICollection<PurchaseDetail> PurchaseDetail { get; set; } 
         
-        public ICollection<Payment> Payment { get; set; } // Navigation property to Payments
+        public ICollection<Payment> Payment { get; set; } 
     }
 }

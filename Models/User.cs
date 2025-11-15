@@ -8,7 +8,7 @@ namespace Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Email is required.")]
+        [Required(ErrorMessage = "Email is required.")] // Decorator (DataAnnotations)
         public string Email { get; set; }
         public int Telephone { get; set; }
 

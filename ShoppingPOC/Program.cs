@@ -48,4 +48,10 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/Login");
+    return Task.CompletedTask;
+});
+
 app.Run();

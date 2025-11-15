@@ -1,8 +1,7 @@
-﻿@page "/"
+﻿@page "/Login"
 
 @using System.ComponentModel.DataAnnotations
 @rendermode InteractiveServer
-@* @using BusinessLogic.Contracts *@
 @using BusinessLogic.Contracts
 @using Models
 
@@ -10,8 +9,7 @@
 
 <EditForm Model="@_user" OnValidSubmit="IniciarSesion" FormName="loginForm">
     <DataAnnotationsValidator />
-    @* <ValidationSummary /> *@
-   
+       
     <h3>Login</h3>
 
     <div class="grid-container">
@@ -26,7 +24,6 @@
             <label for="password">Password</label>
             <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
             <span class="password-toggle" onclick="togglePasswordVisibility()">
-                @* <i class="" id="togglePasswordIcon"></i> *@
             </span>
             
         </div>
@@ -48,23 +45,16 @@
 
 @code {
 
-     [Inject]
-     private ILoginService _loginService { get; set; }
+    [Inject]
+    private ILoginService _loginService { get; set; }
 
     [Inject]
     private NavigationManager _navManager { get; set; }
    
-    // This attribute tells Blazor to populate this property from the form data.
-    [SupplyParameterFromForm(FormName = "loginForm")]
-    private User _user { get; set; } = new();
    
-    protected override void OnInitialized()
-    {
-        // If the form parameter is not yet populated (e.g., on initial page load),
-        // we need to initialize it.
-        _user ??= new User();
-       
-    }
+    [SupplyParameterFromForm(FormName = "loginForm")]
+
+    private User _user { get; set; } = new();
 
     private async Task IniciarSesion()
     {
@@ -73,24 +63,19 @@
 
         if (isValidUser)
         {
-            // Navigate to the home page or dashboard upon successful login.
             _navManager.NavigateTo("/home");
             Console.WriteLine("Login successful");
         }
         else
         {
-            // Show an error message or handle failed login attempt.
             Console.WriteLine("Invalid username or password");
         }
-
     }
 
-    private async Task NavigateToChangePassword()
+    private void NavigateToChangePassword()
     {
         _navManager.NavigateTo("/EmailValidation");
     }
-
-
 }
 
 
