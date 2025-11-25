@@ -5,13 +5,7 @@
 @using BusinessLogic.Contracts
 @using Models
 
-
-
-
-
-
 <EditForm Model="@_user" OnValidSubmit="IniciarSesion" FormName="loginForm">
-    <DataAnnotationsValidator />
        
     <h3>Login</h3>
 
@@ -40,15 +34,19 @@
 </EditForm>
 
 <div class="ChangePassword">
-
     <a 
        @onclick="NavigateToChangePassword"
        class="d-inline-block mt-2">I forgot my password</a>
 </div>
 
+<div class="grid-container">
+@if (!string.IsNullOrEmpty(_userValidation))
+{
+    <div class="alert alert-info mt-3">@_userValidation</div>
+}
+</div>
 @if (_spinner == "Home")
 {
-
     <Spinner Label="Charging Home Page..."/>
 }
 else if (_spinner == "EmailValidation")
@@ -68,6 +66,7 @@ else if (_spinner == "EmailValidation")
 
     private User _user { get; set; } = new();
     private string _spinner { get; set; } = string.Empty;
+    private string _userValidation { get; set; } = string.Empty;
 
     private async Task IniciarSesion()
     {
@@ -76,18 +75,18 @@ else if (_spinner == "EmailValidation")
 
         if (isValidUser)
         {
-
+            _userValidation = "Login successful";
+            StateHasChanged();
             _spinner = "Home";
             StateHasChanged(); // Force UI update to show the spinner
 
             await Task.Delay(2000); // Wait for 2 seconds
 
             _navManager.NavigateTo("/home");
-            Console.WriteLine("Login successful");
         }
         else
         {
-            Console.WriteLine("Invalid username or password");
+            _userValidation = "Invalid username or password";
         }
     }
 
