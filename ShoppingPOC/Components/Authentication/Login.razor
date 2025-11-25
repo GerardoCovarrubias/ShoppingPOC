@@ -7,6 +7,9 @@
 
 
 
+
+
+
 <EditForm Model="@_user" OnValidSubmit="IniciarSesion" FormName="loginForm">
     <DataAnnotationsValidator />
        
@@ -38,11 +41,20 @@
 
 <div class="ChangePassword">
 
-    <a type="submit"
+    <a 
        @onclick="NavigateToChangePassword"
        class="d-inline-block mt-2">I forgot my password</a>
 </div>
 
+@if (_spinner == "Home")
+{
+
+    <Spinner Label="Charging Home Page..."/>
+}
+else if (_spinner == "EmailValidation")
+{
+    <Spinner Label="Charging EmailValidation Page..." />
+}
 @code {
 
     [Inject]
@@ -50,11 +62,12 @@
 
     [Inject]
     private NavigationManager _navManager { get; set; }
-   
-   
+
+
     [SupplyParameterFromForm(FormName = "loginForm")]
 
     private User _user { get; set; } = new();
+    private string _spinner { get; set; } = string.Empty;
 
     private async Task IniciarSesion()
     {
@@ -63,6 +76,12 @@
 
         if (isValidUser)
         {
+
+            _spinner = "Home";
+            StateHasChanged(); // Force UI update to show the spinner
+
+            await Task.Delay(2000); // Wait for 2 seconds
+
             _navManager.NavigateTo("/home");
             Console.WriteLine("Login successful");
         }
@@ -72,8 +91,11 @@
         }
     }
 
-    private void NavigateToChangePassword()
+    private async Task NavigateToChangePassword()
     {
+        _spinner = "EmailValidation";
+        StateHasChanged(); // Force UI update to show the spinner
+        await Task.Delay(2000);
         _navManager.NavigateTo("/EmailValidation");
     }
 }

@@ -1,6 +1,7 @@
 using BusinessLogic.Contracts;
 using BusinessLogic.Services;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 using ShoppingPOC.Components;
 using ShoppingPOC.Data;
 
@@ -27,6 +28,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddMudServices();
 
 #endregion Services
 
