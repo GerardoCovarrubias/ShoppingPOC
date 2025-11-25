@@ -6,41 +6,59 @@
 @using ShoppingPOC.ViewModels
 @rendermode InteractiveServer
 
-<h3>Code Validation</h3>
-
-<div>
-    <div class="grid-container">
-    <div class="form-group">
-            <label for="code">Enter the code sent:</label>
-            <input id="code" class="form-control" @bind="_userInputCode" />
-    </div>
-
-    <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary" @onclick="ValidateCode">Validate</button>
-    </div>
-    </div>
-</div>
-
-@if (!string.IsNullOrEmpty(_errorMessage))
+@if (IsVisible)
 {
-    <p class="text-danger">@_errorMessage</p>
+    <h3>Code Validation</h3>
+
+    <div>
+        <div class="grid-container">
+            <div class="form-group">
+                <label for="code" >Enter the code sent:</label>
+                <input id="code" class="form-control text-center" placeholder="Code goes here" @bind="_userInputCode" />
+            </div>
+
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary" @onclick="ValidateCode">Validate</button>
+            </div>
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <p class="text-danger">@_errorMessage</p>
+            }
+        </div>
+    </div>
+}
+
+
+
+@if (_spinner == "EmailValidation")
+{
+    <Spinner Label="Charging EmailValidation Page..." />
 }
 
 @code {
     [Parameter]
+    public bool IsVisible { get; set; } = true;
+
+    [Parameter]
     public int ValidationCode { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnSuccessfulValidation { get; set; }
 
     private string _errorMessage { get; set; } = string.Empty;
     private int _attemptCount { get; set; } = 0;
-    private int _userInputCode { get; set; } = new();
+    private int? _userInputCode { get; set; }
+    private string _spinner { get; set; } = string.Empty;
 
-    private void ValidateCode()
+    private async Task ValidateCode()
     {
         Console.WriteLine($"UserCode: {ValidationCode}"); 
         Console.WriteLine($"ResetState.ValidationCode: {_userInputCode}");
         if (ValidationCode == _userInputCode)
-        {
-            _navManager.NavigateTo("/PasswordUpdate");
+        {      
+            _errorMessage = string.Empty;
+
+            await NotifySuccessValidation();
         }
         else
         {
@@ -48,13 +66,28 @@
 
             if (_attemptCount >= 3)
             {
+                _errorMessage = $"Last attempt. Send a new code to the email.";
+                _spinner = "EmailValidation";
+                StateHasChanged(); // Force UI update to show the spinner
+                await Task.Delay(3000);
+                _spinner = "";
                 _errorMessage = string.Empty;
-                _navManager.NavigateTo("/EmailValidation");
+                StateHasChanged();
+                await NotifyWrongValidation();
             }
             else
             {
                 _errorMessage = $"Wrong code. Attempt {_attemptCount} of 3.";
             }
         }
+    }
+
+    private async Task NotifySuccessValidation()
+    {
+        await OnSuccessfulValidation.InvokeAsync(true);
+    }
+    private async Task NotifyWrongValidation()
+    {
+        await OnSuccessfulValidation.InvokeAsync(false);
     }
 }

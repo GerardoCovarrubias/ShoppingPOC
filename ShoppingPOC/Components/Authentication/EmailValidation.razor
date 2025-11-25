@@ -8,11 +8,12 @@
 @using ShoppingPOC.ViewModels
 @rendermode InteractiveServer
 
-@if (!_showCodeValidation)
+
+
+@if (!_showCodeValidation && !_showPasswordUpdate)
 {
     <h3>Email Validation</h3>
-
-    <EditForm model=@_passwordResetModel OnValidSubmit="HandleEmailValidationAsync" FormName="formEmailValidation">
+    <EditForm Model=@_passwordResetModel OnValidSubmit="HandleEmailValidationAsync" FormName="formEmailValidation">
         <DataAnnotationsValidator />
         <div class="grid-container">
             <div class="form-group">
@@ -30,11 +31,20 @@
         </div>
     </EditForm>
 }
-else
-{
-    <CodeValidation ValidationCode = "_passwordResetModel.ValidationCode" />
-}
 
+
+<CodeValidation IsVisible="@_showCodeValidation"
+                ValidationCode="_passwordResetModel.ValidationCode"
+                OnSuccessfulValidation="UpdateUI" />
+
+ <PasswordUpdate IsVisible="@_showPasswordUpdate"
+           EmailValidation="@_confirmedEmail" />
+
+@if (_spinner)
+{
+    <Spinner Label="Sending code..." />
+
+}
 @code {
 
     [Inject]
@@ -48,8 +58,10 @@ else
     private PasswordResetViewModel _passwordResetModel { get; set; } = new();
 
     private bool _showCodeValidation = false;
+    private bool _showPasswordUpdate = false;
+    private bool _spinner = false;
     private string _emailStatusMessage;
-
+    private string _confirmedEmail;
 
     private int GenerateUniqueSixDigitCode()
     {
@@ -79,13 +91,42 @@ else
 
         if (result.StatusCode == ResultStatusCode.Success)
         {
+            _confirmedEmail = _passwordResetModel.Email;
+            _spinner = true;
+            StateHasChanged();
+            await Task.Delay(2000);
+
+            _spinner = false;
             _emailStatusMessage = "The mail was sent successfully.";
+            StateHasChanged();
+            await Task.Delay(2000);
             _showCodeValidation = true;
+
         }
         else
         {
             _emailStatusMessage = $"An error occurred while attempting to send the email:  {result.ErrorMessage}";
             _showCodeValidation = false;
+        }
+    }
+
+    private void UpdateUI(bool isValidated)
+    {
+        if (isValidated)
+        {
+            _showCodeValidation = false;
+            _showPasswordUpdate = true;
+            _emailStatusMessage = string.Empty;
+            StateHasChanged();
+        }
+
+        else 
+        {
+            _emailStatusMessage = string.Empty;
+            _showCodeValidation = false;
+            _showPasswordUpdate = false;
+            _emailStatusMessage = "The validation code was incorrect.";
+            StateHasChanged();
         }
     }
 }
