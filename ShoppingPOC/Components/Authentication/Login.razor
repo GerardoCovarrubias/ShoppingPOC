@@ -5,18 +5,18 @@
 @using BusinessLogic.Contracts
 @using Models
 
-<EditForm Model="@_user" OnValidSubmit="IniciarSesion" FormName="loginForm">
-       
-    <h3>Login</h3>
+<EditForm Model="@_user" OnValidSubmit="HandleLoginSumit" FormName="loginForm">
+    <DataAnnotationsValidator />
+    <h3>Login</h3> 
 
     <div class="grid-container">
 
         <div class="form-group">
             <label for="email">Email</label>
             <InputText id="username" class="form-control" @bind-Value="_user.Email" />
-             
+            <ValidationMessage For="@(() => _user.Email)" />
         </div>
-        <ValidationMessage For="@(() => _user.Email)" />
+        
         <div class="form-group mt-3 position-relative">
             <label for="password">Password</label>
             <InputText id="password" type="password" class="form-control" @bind-Value="_user.Password" />
@@ -26,7 +26,7 @@
         </div>
         <ValidationMessage For="@(() => _user.Password)" />
         <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary btnlog">Log In</button>
+            <button type="submit" class="btn btn-primary btn-login">Log In</button>
         </div>
     </div>
 
@@ -49,10 +49,7 @@
 {
     <Spinner Label="Charging Home Page..."/>
 }
-else if (_spinner == "EmailValidation")
-{
-    <Spinner Label="Charging EmailValidation Page..." />
-}
+
 @code {
 
     [Inject]
@@ -68,7 +65,7 @@ else if (_spinner == "EmailValidation")
     private string _spinner { get; set; } = string.Empty;
     private string _userValidation { get; set; } = string.Empty;
 
-    private async Task IniciarSesion()
+    private async Task HandleLoginSumit()
     {
 
         var isValidUser = await _loginService.ValidateUserAsync(_user.Email, _user.Password);
@@ -78,10 +75,8 @@ else if (_spinner == "EmailValidation")
             _userValidation = "Login successful";
             StateHasChanged();
             _spinner = "Home";
-            StateHasChanged(); // Force UI update to show the spinner
-
-            await Task.Delay(2000); // Wait for 2 seconds
-
+            StateHasChanged();
+            await Task.Delay(2000); 
             _navManager.NavigateTo("/home");
         }
         else
@@ -92,8 +87,7 @@ else if (_spinner == "EmailValidation")
 
     private async Task NavigateToChangePassword()
     {
-        _spinner = "EmailValidation";
-        StateHasChanged(); // Force UI update to show the spinner
+        StateHasChanged(); 
         await Task.Delay(2000);
         _navManager.NavigateTo("/EmailValidation");
     }

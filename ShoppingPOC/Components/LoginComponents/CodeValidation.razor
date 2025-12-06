@@ -68,7 +68,7 @@
             {
                 _errorMessage = $"Last attempt. Send a new code to the email.";
                 _spinner = "EmailValidation";
-                StateHasChanged(); // Force UI update to show the spinner
+                StateHasChanged(); 
                 await Task.Delay(3000);
                 _spinner = "";
                 _errorMessage = string.Empty;
