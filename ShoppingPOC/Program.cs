@@ -30,7 +30,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddMudServices();
-builder.Services.AddScoped<UserSession>();
+builder.Services.AddSingleton<UserSession>();
 
 #endregion Services
 

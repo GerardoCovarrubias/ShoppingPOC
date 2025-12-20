@@ -4,9 +4,9 @@ namespace ShoppingPOC.Components.Authentication
 {
     public class UserSession
     {
-        public User? CurrentUser { get; set; }
+        public User CurrentUser { get; set; }
 
         // You can add a helper property for clarity
-        public bool IsLoggedIn => CurrentUser != null;
+        public bool IsLoggedIn => CurrentUser is not null;
     }
 }

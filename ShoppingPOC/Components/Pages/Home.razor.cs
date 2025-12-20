@@ -1,22 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace ShoppingPOC.Components.Pages
 {
     public partial class Home
     {
-        protected override void OnInitialized()
-        {
-            if (!Session.IsLoggedIn)
-            {
-                // Redirect to the login page
-                NavManager.NavigateTo("/Login");
-            }
-        }
-        private List<Product> products;
 
+        [Inject]
+        private NavigationManager _navManager { get; set; }
+
+        private List<Product> products;
         protected override async Task OnInitializedAsync()
         {
+            // 1. Check Login Status first
+            if (!Session.IsLoggedIn)
+            {
+                // Redirect and set 'forceLoad' if necessary (usually false is fine for internal routing)
+                _navManager.NavigateTo("/Login");
+
+                // CRITICAL: Return immediately so code below does not run
+                return;
+            }
+
+            // 2. Only load data if the user is actually logged in
             await LoadProducts();
         }
 
