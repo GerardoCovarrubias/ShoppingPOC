@@ -3,6 +3,7 @@ using BusinessLogic.Services;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using ShoppingPOC.Components;
+using ShoppingPOC.Components.Authentication;
 using ShoppingPOC.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,7 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddMudServices();
+builder.Services.AddScoped<UserSession>();
 
 #endregion Services
 
@@ -49,11 +51,5 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
-app.MapGet("/", context =>
-{
-    context.Response.Redirect("/Login");
-    return Task.CompletedTask;
-});
 
 app.Run();

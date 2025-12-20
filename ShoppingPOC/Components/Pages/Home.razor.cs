@@ -5,8 +5,15 @@ namespace ShoppingPOC.Components.Pages
 {
     public partial class Home
     {
-        
-    private List<Product> products;
+        protected override void OnInitialized()
+        {
+            if (!Session.IsLoggedIn)
+            {
+                // Redirect to the login page
+                NavManager.NavigateTo("/Login");
+            }
+        }
+        private List<Product> products;
 
         protected override async Task OnInitializedAsync()
         {
