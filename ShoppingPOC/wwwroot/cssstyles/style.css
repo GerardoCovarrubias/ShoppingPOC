@@ -1,36 +1,29 @@
+
 h3 {
     color: blue;
 }
 
 .grid-container {
-    display: grid;
-    justify-items: center; /* Centra el contenido horizontalmente en cada celda */
-    align-items: center; /* Centra el contenido verticalmente en cada celda */
-    width: 100%; /* El contenedor ocupa el ancho completo */
+    max-width: 400px;
+    margin: 0 auto;
 }
 
+/* FIX: Change fixed 221px to 100% */
 .btnlog {
-    width: 221px;  
+    width: 100%;
 }
 
-.form-group.position-relative {
-    /* Asegura que el contenedor es el punto de referencia para el posicionamiento */
+/* This container ensures the password icon stays inside the input box */
+.password-wrapper {
     position: relative;
+    width: 100%;
 }
 
 .password-toggle {
-    /* Posiciona el ícono dentro del input, no al lado */
     position: absolute;
-    right: 15px; /* Ajusta la distancia desde la derecha del input */
-    top: 50%; /* Centra verticalmente */
-    transform: translateY(-50%); /* Ajuste fino para el centrado */
-    cursor: pointer; /* Cambia el cursor para indicar que es clicable */
-    z-index: 100; /* Asegura que el ícono esté por encima del input */
-}
-
-.ChangePassword {
-    /*hace que los elementos esten "dentro" del div*/
-    display: flex;
-    /*centra los elementos en el eje horizontal*/
-    justify-content: center;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 100;
 }

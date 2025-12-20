@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using ShoppingPOC.Data;
 
 namespace BusinessLogic.Services
@@ -68,5 +69,29 @@ namespace BusinessLogic.Services
             }
         }
 
+        public async Task RegisterUserAsync(User newUser)
+        {
+            if(newUser == null) return;
+
+            try
+            {
+                var existingUser = await _dbContext.User
+                    .FirstOrDefaultAsync(u => u.Email == newUser.Email);
+
+                if (existingUser != null)
+                {
+                    return;
+                }
+              
+                _dbContext.User.Add(newUser);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
+
+
