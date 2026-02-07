@@ -61,6 +61,9 @@
     [Inject]
     private NavigationManager _navManager { get; set; }
 
+    [Inject]
+    private UserSession _userSession { get; set; }
+
 
     [SupplyParameterFromForm(FormName = "loginForm")]
 
@@ -75,12 +78,11 @@
 
         if (isValidUser)
         {
+            _userSession.CurrentUser = _user;
+
             _userValidation = "Login successful";
-            StateHasChanged();
-            _spinner = "Home";
-            StateHasChanged();
-            await Task.Delay(2000); 
-            _navManager.NavigateTo("/home");
+  
+            _navManager.NavigateTo("/");
         }
         else
         {

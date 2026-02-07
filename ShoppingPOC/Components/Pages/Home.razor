@@ -1,7 +1,9 @@
-﻿@page "/Home" 
+﻿@page "/" 
 @using Microsoft.EntityFrameworkCore
+@using ShoppingPOC.Components.Authentication
 @using ShoppingPOC.Data
 @inject IDbContextFactory<ApplicationDbContext> DbContextFactory
+@inject UserSession Session
 
 <PageTitle>Home</PageTitle>
 
